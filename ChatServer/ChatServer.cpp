@@ -4,6 +4,7 @@
 #include"Room.h"
 #include"Protocol.h"
 #include"WinSocketHeader.h"
+#include"User.h"
 
 CChatServer::~CChatServer() {}
 
@@ -29,18 +30,19 @@ void CChatServer::ProcessAsyncAccpet(const CSession& user) {
     Send_LoginOK(&user);
 }
 
-void CChatServer::ProcessSocketIO(void* packet,const  PacketType packIoType,const CSession& session){
+void CChatServer::ProcessSocketIO(void* packet,const PacketType packIoType,const CSession& session){
 
-    //스위치 말고 다른거 사용
-    switch (packIoType) {
-    case  PACKET_TYPE::CS_SEND_MESSAGE: {
+  //스위치 말고 다른거 사용
+  switch (packIoType) {
+  case PACKET_TYPE::CS_SEND_MESSAGE: {
+    //Send_Message()
+    break;
+  }
+  default:
+    std::cout << "Error: ProcessSocketID\n";
+    break;
+  }
 
-      break;
-    }
-    default:
-        std::cout<<"Error: ProcessSocketID\n";
-      break;
-    }
 }
 
 void CChatServer::Send_LoginOK(const CSession* user){
@@ -60,12 +62,15 @@ void CChatServer::Send_LoginOK(const CSession* user){
     // }
 }
 
-void CChatServer::Send_Message(const CSession* user){
+void CChatServer::Send_Message(const CSession *user) {
 
   sc_message_packet packet;
+  //packet.id= dynamic_cast<CUser*>(user)->GetMyID();
 
-  
-
-
+  const_cast<CSession *>(user)->DoSend(&packet);
 }
 
+/*
+
+
+*/
