@@ -12,15 +12,15 @@ const RoomNumber    CHAT_ROOM_COUNT     = 6;
 
 namespace PACKET_TYPE {
 
-  const int SC_LOGIN_OK         = 1;
-  const int SC_SEND_MESSAGE     = 2;
-  const int SC_NEW_USER         = 3;
-  const int SC_CHANGED_ROOM     = 4;
-  const int SC_OUT_USER         = 5;
+  const int SC_LOGIN_OK           = 1;
+  const int SC_SEND_MESSAGE       = 2;
+  const int SC_NEW_USER           = 3;
+  const int SC_CHANGED_ROOM       = 4;
+  const int SC_OUT_USER           = 5;
 
-  const int CS_SEND_MESSAGE     = 1;
-  const int CS_CHANGED_ROOM     = 2;
-  const int CS_WHISPER_MESSAGE   = 3;
+  const int CS_SEND_MESSAGE       = 1;
+  const int CS_CHANGED_ROOM       = 2;
+  const int CS_WHISPER_MESSAGE    = 3;
 
 } // namespace PACKET_TYPE
 
@@ -59,7 +59,8 @@ struct sc_changedRoom_packet:public PacketHeader{
   ClientID    roomClientids[MAX_ROOM_CLIENT];
   size_t      countOfclient;
 
-  sc_changedRoom_packet():PacketHeader(sizeof(sc_changedRoom_packet),PACKET_TYPE::SC_CHANGED_ROOM){}
+  sc_changedRoom_packet():PacketHeader(sizeof(sc_changedRoom_packet),PACKET_TYPE::SC_CHANGED_ROOM),
+  roomClientids(),countOfclient(){}
 };
 
 struct sc_outUser_packet:public PacketHeader{
@@ -67,7 +68,6 @@ struct sc_outUser_packet:public PacketHeader{
 
   sc_outUser_packet():PacketHeader(sizeof(sc_outUser_packet),PACKET_TYPE::SC_OUT_USER){}
 };
-
 
 // Client----> Server
 struct cs_message_packet:public PacketHeader{

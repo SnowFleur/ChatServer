@@ -26,6 +26,9 @@ DWORD CWorkerThread::DoThread(){
   //나중에 hash 혹은 다른 자료구조를 이용해 추상화 하기
   switch (overEX->ioEvent) {
     case IO_ACCEPT: {
+#ifdef _DEBUG
+      std::cout << "Client Accept\n";
+#endif
       ProcessAccept(overEX);
       break;
     }
@@ -34,6 +37,9 @@ DWORD CWorkerThread::DoThread(){
       break;
     }
     case IO_SEND: {
+#ifdef _DEBUG
+      std::cout << "Send:" << IoByte << "\n";
+#endif
       break;
     }
     default: {
@@ -101,6 +107,7 @@ void CWorkerThread::ProcessRecv(OverlappedEx *overEX,DWORD ioByte) {
       rest -= required;
       ptr += required;
       overEX->session->SetPrevSize(0);
+      packet_size=0;
     }
 
     else {
@@ -112,4 +119,5 @@ void CWorkerThread::ProcessRecv(OverlappedEx *overEX,DWORD ioByte) {
       rest = 0;
     }
   }
+  
 }

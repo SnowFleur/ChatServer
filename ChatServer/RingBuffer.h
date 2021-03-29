@@ -6,7 +6,7 @@
 const int ERROR_RINGBUFFER_FULL     = -1;
 
 //최대 5개까지 받을 수 있는 크기
-const int RING_BUFFER_SIZE          = BUFFER_SIZE*5;
+const int RING_BUFFER_SIZE          = BUFFER_SIZE*10;
 
 //1 4 4 8 ? ?
 template<class T>

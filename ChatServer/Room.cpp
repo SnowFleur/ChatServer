@@ -28,7 +28,6 @@ bool CRoom::DeletedUserInRoom(CSession *user) {
 
   // Lock Guard
   LockGuard lockguard(m_roomLock);
-  //RoomIter iter = std::find(m_userList.begin(), m_userList.end(), user);
   RoomIter iter = std::find(m_rooms[number].begin(),m_rooms[number].end(),user);
 
   if (iter != m_rooms[number].end()) {
@@ -58,7 +57,7 @@ void CRoom::CopyAllUserInRoom(const CSession* user,ClientID* roomClientids,size_
   RoomNumber number = dynamic_cast<const CUser *>(user)->GetCurrentRoomNumber();
 
   LockGuard lockGuard(m_roomLock);
-  //이거는 함수를 타야하기 때문에 한번에 Read X
+  // 이거는 함수를 타야하기 때문에 한번에 Read X
   countOfClinet = m_rooms[number].size();
 
   for (int i = 0; i < m_rooms[number].size(); ++i) {
@@ -67,17 +66,85 @@ void CRoom::CopyAllUserInRoom(const CSession* user,ClientID* roomClientids,size_
 
 }
 
-void CRoom::SendAllMessageInRoom(const CSession* user, void* packet){
+void CRoom::CopyAllUserInRoom(const RoomNumber roomNumber,ClientID* roomClientids,size_t& countOfClinet){
+  LockGuard lockGuard(m_roomLock);
+
+  countOfClinet = m_rooms[roomNumber].size();
+  for (int i = 0; i < m_rooms[roomNumber].size(); ++i) {
+    roomClientids[i] =  m_rooms[roomNumber][i]->GetClientID();
+  }
+
+}
+
+void CRoom::SendAllMessageInRoom(const CSession* user, void* packet,bool ignoreMe){
 
   //다이나믹 말고 다른 방법 찾기
   RoomNumber number = dynamic_cast<const CUser *>(user)->GetCurrentRoomNumber();
 
+  LockGuard lockGuard(m_roomLock);
+
   //본인이 들어가있는 방에 모두 전송
  for (RoomIter iter = m_rooms[number].begin(); iter != m_rooms[number].end(); ++iter) {
 
+   if(ignoreMe)
     if((*iter)->GetClientID()==user->GetClientID())continue;
 
     (*iter)->DoSend(packet);
   }
 
+}
+
+void CRoom::SendAllMessageInRoom(const RoomNumber roomNumber,void* packet){
+
+  LockGuard lockGuard(m_roomLock);
+
+  //특정 방에 있는 모든 유저에게 전송
+ for (RoomIter iter = m_rooms[roomNumber].begin(); iter != m_rooms[roomNumber].end(); ++iter) {
+    (*iter)->DoSend(packet);
+  }
+}
+
+
+void CRoom::ChangedRoom(const CSession* user,RoomNumber newRoomNumber){
+
+  RoomNumber oldRoomNumber=dynamic_cast<const CUser *>(user)->GetCurrentRoomNumber();
+
+  //해당 유저를 old->user로 바꾸고
+  DeletedUserInRoom(const_cast<CSession*>(user));
+  InsertUserInRoom(const_cast<CSession *>(user),newRoomNumber);
+
+  //기존 유저들에게 바뀐 룸 정보 전송
+  SendRoomInfor(oldRoomNumber);
+  //새로운 유저들에게 바뀐 룸 정보 전송
+  SendRoomInfor(newRoomNumber);
+}
+
+void CRoom::SendNewUserInRoom(const CSession* user){
+
+  sc_newUser_packet newUserPacket;
+  newUserPacket.new_userNumber = user->GetClientID();
+  SendAllMessageInRoom(user,&newUserPacket);
+
+  SendRoomInfor(user);
+}
+
+void CRoom::SendOutUserInRoom(const CSession* user){
+
+  sc_outUser_packet outUserpacket;
+  outUserpacket.out_userNumber = user->GetClientID();
+  SendAllMessageInRoom(user, &outUserpacket);
+
+  SendRoomInfor(user);
+}
+
+void CRoom::SendRoomInfor(const CSession* user){
+  sc_changedRoom_packet changedRoomPacket;
+  CopyAllUserInRoom(user, changedRoomPacket.roomClientids,changedRoomPacket.countOfclient);
+  SendAllMessageInRoom(user,&changedRoomPacket);
+}
+
+void CRoom::SendRoomInfor(const RoomNumber roomNumber){
+ sc_changedRoom_packet changedRoomPacket;
+  CopyAllUserInRoom(roomNumber, changedRoomPacket.roomClientids,changedRoomPacket.countOfclient);
+  SendAllMessageInRoom(roomNumber,&changedRoomPacket);
 }

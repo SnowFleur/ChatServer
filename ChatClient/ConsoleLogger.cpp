@@ -348,17 +348,17 @@ int CConsoleLoggerEx::_print(const char *lpszText,int iSize)
 	// 32BIT: send DWORD = 4bytes: one byte is the command (COMMAND_PRINT) , and 3 bytes for size
 	
 	DWORD command_plus_size = (COMMAND_PRINT <<24)| iSize;
-	EnterCriticalSection();
+	//EnterCriticalSection();
 	if ( !WriteFile (m_hPipe, &command_plus_size,sizeof(DWORD),&dwWritten,NULL) 
 		|| dwWritten != sizeof(DWORD))
 	{
-		LeaveCriticalSection();
+		//LeaveCriticalSection();
 		return -1;
 	}
 	
 	int iRet = (!WriteFile( m_hPipe,lpszText,iSize,&dwWritten,NULL)
 		|| (int)dwWritten!=iSize) ? -1 : (int)dwWritten;
-	LeaveCriticalSection();
+	//LeaveCriticalSection();
 	return iRet;
 }
 
@@ -385,10 +385,10 @@ void CConsoleLoggerEx::cls(DWORD color)
 	// we assume that in iSize < 2^24 , because we're using only 3 bytes of iSize 
 	// 32BIT: send DWORD = 4bytes: one byte is the command (COMMAND_PRINT) , and 3 bytes for size
 	DWORD command = COMMAND_COLORED_CLEAR_SCREEN<<24;
-	EnterCriticalSection();
+	//EnterCriticalSection();
 	WriteFile (m_hPipe, &command,sizeof(DWORD),&dwWritten,NULL);
 	WriteFile (m_hPipe, &color,sizeof(DWORD),&dwWritten,NULL);
-	LeaveCriticalSection();
+	//LeaveCriticalSection();
 }	
 
 //////////////////////////////////////////////////////////////////////////
@@ -412,10 +412,10 @@ void CConsoleLoggerEx::clear_eol(DWORD color)
 	// we assume that in iSize < 2^24 , because we're using only 3 bytes of iSize 
 	// 32BIT: send DWORD = 4bytes: one byte is the command (COMMAND_PRINT) , and 3 bytes for size
 	DWORD command = COMMAND_COLORED_CLEAR_EOL<<24;
-	EnterCriticalSection();
+	//EnterCriticalSection();
 	WriteFile (m_hPipe, &command,sizeof(DWORD),&dwWritten,NULL);
 	WriteFile (m_hPipe, &color,sizeof(DWORD),&dwWritten,NULL);
-	LeaveCriticalSection();
+	//LeaveCriticalSection();
 }	
 
 
@@ -428,11 +428,11 @@ void CConsoleLoggerEx::gotoxy(int x,int y)
 	// we assume that in iSize < 2^24 , because we're using only 3 bytes of iSize 
 	// 32BIT: send DWORD = 4bytes: one byte is the command (COMMAND_PRINT) , and 3 bytes for size
 	DWORD command = COMMAND_GOTOXY<<24;
-	EnterCriticalSection();
+//	EnterCriticalSection();
 	WriteFile (m_hPipe, &command,sizeof(DWORD),&dwWritten,NULL);
 	command = (x<<16)  | y;
 	WriteFile (m_hPipe, &command,sizeof(DWORD),&dwWritten,NULL);
-	LeaveCriticalSection();
+//	LeaveCriticalSection();
 }	
 
 
@@ -504,7 +504,7 @@ int CConsoleLoggerEx::_cprint(int attributes,const char *lpszText,int iSize)
 	// we assume that in iSize < 2^24 , because we're using only 3 bytes of iSize 
 	// 32BIT: send DWORD = 4bytes: one byte is the command (COMMAND_CPRINT) , and 3 bytes for size
 	DWORD command_plus_size = (COMMAND_CPRINT <<24)| iSize;
-	EnterCriticalSection();
+//	EnterCriticalSection();
 	if ( !WriteFile (m_hPipe, &command_plus_size,sizeof(DWORD),&dwWritten,NULL) 
 		|| dwWritten != sizeof(DWORD))
 	{
@@ -522,7 +522,7 @@ int CConsoleLoggerEx::_cprint(int attributes,const char *lpszText,int iSize)
 	
 	int iRet = (!WriteFile( m_hPipe,lpszText,iSize,&dwWritten,NULL)
 		|| (int)dwWritten!=iSize) ? -1 : (int)dwWritten;
-	LeaveCriticalSection();
+//	LeaveCriticalSection();
 	return iRet;
 }
 

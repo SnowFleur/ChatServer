@@ -1,15 +1,10 @@
-#include "ChatClient.h"
+#include<iostream>
 #include <conio.h>
+#include "ChatClient.h"
 
-Buffer::Buffer() : prevSize(0) {
-  ZeroMemory(&sendWsabuf, sizeof(sendWsabuf));
-  ZeroMemory(&recvWsabuf, sizeof(recvWsabuf));
-  ZeroMemory(&sendBuffer, sizeof(sendBuffer));
-  ZeroMemory(&recvBuffer, sizeof(recvBuffer));
+Buffer::Buffer() :m_recvWsabuf(),m_sendWsabuf(),m_recvBuffer(),
+m_sendBuffer(),m_userBuffer(),m_prevSize(0) {
 
-  recvWsabuf.buf = recvBuffer;
-  recvWsabuf.len = BUFFER_SIZE;
-  sendWsabuf.buf = sendBuffer;
 }
 
 CChatClient::CChatClient() :
@@ -20,7 +15,6 @@ CChatClient::CChatClient() :
 }
 
 void CChatClient::Run(SOCKET_TYPE socketType) {
-
 
   //Set Main Console Size
   system("mode con cols=70 lines=20"); 
@@ -135,6 +129,7 @@ void CChatClient::ProcessChatting() {
 
     // Read
     if (wsaNetEvents.lNetworkEvents & FD_READ) {
+
       CLIENT_NETWORK::Recv(*this);
       CScreenManager::GetInstance()->DrawToMynameAndRoomNumber(myNumber_,currentRoomNumber_);
       CScreenManager::GetInstance()->DrawToUserIndex(roomUserList_);
@@ -153,18 +148,24 @@ void CChatClient::ProcessChatting() {
 void CChatClient::SendPacket(void *packet) {
   char *p = reinterpret_cast<char *>(packet);
 
-  clinetBuffer.sendWsabuf.len = p[0];
-  memcpy_s(clinetBuffer.sendBuffer, p[0], packet, p[0]);
+  //링버퍼에서 사용 가능한 버퍼 가져옴
+  clinetBuffer.m_sendWsabuf.buf=clinetBuffer.m_sendBuffer.GetWriteIndex();
+  //패킷 사이즈
+  clinetBuffer.m_sendWsabuf.len=p[0];
+  // 보내는 패킷사이즈 만큼 Index 이동
+  clinetBuffer.m_sendBuffer.SetWriteIndex(p[0]);
 
-  WSASend(clinetSocket_, &clinetBuffer.sendWsabuf, 1, 0, 0, NULL, NULL);
+  memcpy_s(clinetBuffer.m_sendWsabuf.buf,clinetBuffer.m_sendWsabuf.len, packet, p[0]);
+
+  WSASend(clinetSocket_, &clinetBuffer.m_sendWsabuf, 1, 0, 0, NULL, NULL);
 }
 
 void CChatClient::ProcessPakcet() {
 
-  switch (clinetBuffer.packetBuffer[1]) {
+  switch (clinetBuffer.m_userBuffer[1]) {
   case PACKET_TYPE::SC_LOGIN_OK: {
     sc_loginOk_packet *loginOk_packet =
-        reinterpret_cast<sc_loginOk_packet *>(clinetBuffer.recvBuffer);
+        reinterpret_cast<sc_loginOk_packet *>(clinetBuffer.m_userBuffer);
     myNumber_ = loginOk_packet->myNumber;
     CScreenManager::GetInstance()->DrawToMynameAndRoomNumber(myNumber_,currentRoomNumber_);
 
@@ -174,25 +175,24 @@ void CChatClient::ProcessPakcet() {
   }
   case PACKET_TYPE::SC_SEND_MESSAGE: {
     sc_message_packet *message_packet =
-        reinterpret_cast<sc_message_packet *>(clinetBuffer.recvBuffer);
+        reinterpret_cast<sc_message_packet *>(clinetBuffer.m_userBuffer);
 
     CScreenManager::GetInstance()->InsertChat(message_packet->id,message_packet->message);
     break;
   }
   case PACKET_TYPE::SC_NEW_USER: {
     sc_newUser_packet *newUser_packet =
-        reinterpret_cast<sc_newUser_packet *>(clinetBuffer.recvBuffer);
+        reinterpret_cast<sc_newUser_packet *>(clinetBuffer.m_userBuffer);
     CScreenManager::GetInstance()->InsertChat(newUser_packet->new_userNumber,"Join In Room\n");
     break;
   }
   case PACKET_TYPE::SC_CHANGED_ROOM: {
     sc_changedRoom_packet *changedRoom_packet =
-        reinterpret_cast<sc_changedRoom_packet *>(clinetBuffer.recvBuffer);
+        reinterpret_cast<sc_changedRoom_packet *>(clinetBuffer.m_userBuffer);
 
     for (int i = 0; i < MAX_ROOM_CLIENT; ++i) {
       roomUserList_[i] = NO_RECV_NUMBER_TO_SERVER;
     }
-    
     for (size_t i = 0; i < changedRoom_packet->countOfclient; ++i) {
       roomUserList_[i] = changedRoom_packet->roomClientids[i];
     }
@@ -201,7 +201,7 @@ void CChatClient::ProcessPakcet() {
   }
   case PACKET_TYPE::SC_OUT_USER: {
     sc_outUser_packet *outUser_packet =
-        reinterpret_cast<sc_outUser_packet *>(clinetBuffer.recvBuffer);
+        reinterpret_cast<sc_outUser_packet *>(clinetBuffer.m_userBuffer);
          CScreenManager::GetInstance()->InsertChat(outUser_packet->out_userNumber,"Out In Room\n"); 
     break;
   }

@@ -43,7 +43,7 @@ bool CSession::DoSend(void* packet) {
 
   memcpy_s(overEX->wsabuf.buf,overEX->wsabuf.len, packet, p[0]);
 
- int result=WSASend(m_socket, &overEX->wsabuf, 1, &dwBytes, dwFlags,(LPWSAOVERLAPPED)overEX,NULL);
+ sendReturn=WSASend(m_socket, &overEX->wsabuf, 1, &dwBytes, dwFlags,(LPWSAOVERLAPPED)overEX,NULL);
  if (sendReturn == SOCKET_ERROR) {
    if (WSAGetLastError() != WSA_IO_PENDING) {
      std::cout << "Error: Send  " << WSAGetLastError() << "\n";

@@ -168,6 +168,10 @@
 				RelativePath=".\ChatServer.h"
 				>
 			</File>
+			<File
+				RelativePath="..\ChatClient\ScreenManager.h"
+				>
+			</File>
 			<Filter
 				Name="User"
 				>
@@ -289,18 +293,6 @@
 					RelativePath=".\WinSocketHeader.h"
 					>
 				</File>
-				<Filter
-					Name="Network"
-					>
-					<File
-						RelativePath=".\ServerNetwork.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\ServerNetwork.h"
-						>
-					</File>
-				</Filter>
 			</Filter>
 		</Filter>
 	</Files>

@@ -177,7 +177,7 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Header"
+			Name="Network Lib"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
@@ -186,7 +186,19 @@
 				>
 			</File>
 			<File
+				RelativePath="..\ChatServer\Lock.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Lock.h"
+				>
+			</File>
+			<File
 				RelativePath="..\ChatServer\Protocol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\RingBuffer.h"
 				>
 			</File>
 			<File
@@ -211,10 +223,6 @@
 			>
 			<File
 				RelativePath=".\ScreenManager.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\ScreenManager.h"
 				>
 			</File>
 		</Filter>

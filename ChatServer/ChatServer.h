@@ -35,13 +35,11 @@ private:
     CChatServer(const CChatServer &);
     CChatServer &operator=(const CChatServer &);
 
-    void Send_LoginOK(const CSession* user,void* packetBuffer=NULL);
     void Send_Message(const CSession* user,void* packetBuffer=NULL);
     void Send_ChangedRoom(const CSession* user,void* packetBuffer=NULL);
     void Send_WhisperMessage(const CSession* user,void* packetBuffer=NULL);
-    void Send_NewUser(const CSession* user,void* packetBuffer=NULL);
-    void Send_OutUser(const CSession* user,void* packetBuffer=NULL);
-    void Send_RoomUserList(const CSession* user,void* packetBuffer=NULL);
+
+    void Send_LoginOK(const CSession* user,void* packetBuffer=NULL);
 
 public:
     CChatServer():m_roomHandle(NULL){}

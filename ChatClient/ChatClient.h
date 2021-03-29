@@ -1,17 +1,17 @@
 #pragma once
-#include <iostream>
 #include "ClientNetwork.h"
 #include "ScreenManager.h"
+#include"..\ChatServer\RingBuffer.h"
 
 static char MainConsoleTitle;
 
 struct Buffer {
-    WSABUF              recvWsabuf;
-    char                recvBuffer[BUFFER_SIZE]; 
-    WSABUF              sendWsabuf;
-    char                sendBuffer[BUFFER_SIZE]; 
-    char                packetBuffer[BUFFER_SIZE]; 
-    int                 prevSize;
+    WSABUF                m_recvWsabuf;
+    WSABUF                m_sendWsabuf;
+    CRingBuffer<char>     m_recvBuffer;
+    CRingBuffer<char>     m_sendBuffer;
+    char                  m_userBuffer[BUFFER_SIZE]; 
+    DWORD                 m_prevSize;
     Buffer();
 };
 

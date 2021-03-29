@@ -1,7 +1,7 @@
 #pragma once
 #include<vector>
 // Network Packet Type
-typedef unsigned char           PacketSize;
+typedef char                    PacketSize;
 typedef char                    PacketType;
 
 typedef short                   ClientID;

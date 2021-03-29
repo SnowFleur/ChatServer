@@ -5,14 +5,12 @@
 #include"Lock.h"
 #include"Protocol.h"
 
-
 class CSession;
 
 class CRoom {
     typedef std::vector<CSession*>::iterator RoomIter;
     typedef std::vector<CSession*> Rooms;
 private:
-    //std::vector<CSession*>  m_userList;
     std::vector<Rooms>      m_rooms;
     RoomNumber              m_currUserCountInRoom;
     RoomNumber              m_maxUserCountInRoom;
@@ -29,9 +27,20 @@ public:
   inline RoomNumber GetCurrUserCountInRoom()const{return m_currUserCountInRoom;} 
   inline RoomNumber GetMaxUserCountInRoom()const{return m_maxUserCountInRoom;}
 
+  //Process Funcs
   bool InsertUserInRoom(CSession* user, const RoomNumber roomNumber=0);
   bool DeletedUserInRoom(CSession* user);
   bool FindUserInRoom(const CSession* user);
   void CopyAllUserInRoom(const CSession* user,ClientID* roomClientids,size_t& countOfClinet);
-  void SendAllMessageInRoom(const CSession* user, void* packet);
+  void CopyAllUserInRoom(const RoomNumber roomNumber,ClientID* roomClientids,size_t& countOfClinet);
+  void ChangedRoom(const CSession* user, RoomNumber roomNumber);
+
+  //Send Funcs
+  void SendAllMessageInRoom(const CSession* user, void* packet,bool ignoreMe=false);
+  void SendAllMessageInRoom(const RoomNumber roomNumber,void* packet);
+  void SendNewUserInRoom(const CSession* user);
+  void SendOutUserInRoom(const CSession* user);
+  void SendRoomInfor(const CSession* user);
+  void SendRoomInfor(const RoomNumber roomNumber);
+
 };

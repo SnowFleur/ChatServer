@@ -20,6 +20,7 @@ void CChatServer::Init() {
 }
 
 void CChatServer::Run(){
+  std::cout<<"Run Server\n";
     while(true){}
 }
 
@@ -36,10 +37,9 @@ void CChatServer::ProcessAsyncAccpet(CSession& user) {
 
     //Send Login Ok
     Send_LoginOK(&user);
-    //Send NewUser
-    Send_NewUser(&user);
-    //Send UserList
-    Send_RoomUserList(&user);
+
+    //새로운 유저의 접속 알림 및 리스트 전송
+    m_roomHandle->SendNewUserInRoom(&user);
 
 }
 
@@ -53,7 +53,6 @@ void CChatServer::ProcessSocketIO(void* packet,const CSession& session){
   //call Recv
   const_cast<CSession&>(session).DoRecv();
 }
-
 
 void CChatServer::Send_LoginOK(const CSession *user, void *packetBuffer) {
   sc_loginOk_packet packet;
@@ -80,8 +79,7 @@ void CChatServer::Send_Message(const CSession *user, void *packetBuffer) {
   packet.id = user->GetClientID();
 
   // 자기가 들어가 있는 방에 Broad Cast
-  m_roomHandle->SendAllMessageInRoom(user,&packet);
-
+  m_roomHandle->SendAllMessageInRoom(user, &packet);
 }
 
  //나중에 다시 수정하기 로직이 넘 이상
@@ -90,46 +88,8 @@ void CChatServer::Send_ChangedRoom(const CSession* user,void* packetBuffer){
   cs_changedRoom_packet *changedRoom_packet =
       reinterpret_cast<cs_changedRoom_packet *>(packetBuffer);
 
-    RoomNumber newRoom=changedRoom_packet->changed_room_number;
-
-      //해당 유저의 퇴장을 보냄(OLD) -->버그
-      //Send_OutUser(user);
-      //Send_RoomUserList(user);
-
-    if(m_roomHandle->DeletedUserInRoom(const_cast<CSession*>(user))==false){
-      std::cout<<"Error: Not Find user\n";
-    } 
-    
-    else {
-      if (m_roomHandle->InsertUserInRoom(const_cast<CSession *>(user),newRoom) == true) {
-        //해당 유저의 접속을 보냄(NEW)
-        Send_RoomUserList(user);
-        Send_NewUser(user);
-      }
-    }
+  //해당 유저의 퇴장을 보냄(OLD) -->버그
+  m_roomHandle->ChangedRoom(user, changedRoom_packet->changed_room_number);
 }
 
 void CChatServer::Send_WhisperMessage(const CSession* user,void* packetBuffer){}
-
-void CChatServer::Send_NewUser(const CSession *user, void *packetBuffer) {
-  sc_newUser_packet packet;
-  packet.new_userNumber = user->GetClientID();
-  // 자기가 들어가 있는 방에 Broad Cast
-  m_roomHandle->SendAllMessageInRoom(user,&packet);
-}
-
-void CChatServer::Send_OutUser(const CSession* user,void* packetBuffer){
-  sc_outUser_packet packet;
-  packet.out_userNumber= user->GetClientID();
-
-  // 자기가 들어가 있는 방에 Broad Cast
-  m_roomHandle->SendAllMessageInRoom(user,&packet);
-}
-
-void CChatServer::Send_RoomUserList(const CSession* user,void* packetBuffer){
-    sc_changedRoom_packet packet;
-    m_roomHandle->CopyAllUserInRoom(user,packet.roomClientids,packet.countOfclient);
-    m_roomHandle->SendAllMessageInRoom(user,&packet);
-
-    const_cast<CSession *>(user)->DoSend(&packet);
-}
