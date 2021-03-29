@@ -26,7 +26,6 @@ private:
   void InitSocket(const SOCKET_TYPE);
   void ProcessChatting();
   void SendPacket(void* packet);
-  void SendChat();
   void JoinInRoom();
   void OutInRoom();
 public:

@@ -55,4 +55,7 @@ public:
 
     virtual void   ProcessIO()=0;
 
+    virtual ClientID GetClientID()const=0;
+    virtual void SetClientID(const ClientID)=0;
+
 };

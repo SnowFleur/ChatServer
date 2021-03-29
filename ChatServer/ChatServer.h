@@ -3,16 +3,7 @@
 #include <map>
 #include"DataDefine.h"
 #include"BaseServer.h"
-
 #include"Lock.h"
-
-// 이름이 너무 비직관적
-
-enum USER_IO_TYPE{
-    USER_ACCEPT=1,
-    USER_SEND_MESSAGE,
-    USER_CHANGE_ROOM
-};
 
 // 이 클래스가 채팅의 모든걸 관리한다.
 class CRoom;
@@ -26,27 +17,42 @@ class CChatServer : public CBaseServer {
     typedef std::vector<CRoom*>::iterator           RoomsIter;
     typedef std::vector<CRoom*>::const_iterator     ConstRoomsIter;
 
+    typedef void (CChatServer::*MFP)(const CSession*, void*);
+    typedef  char               FN;  //Function Number
+    typedef std::pair<FN,MFP>   PairProcessPacket;
+
 private:
     std::vector<CSession*>  m_users;
-    std::vector<CRoom*>     m_rooms;
+    CRoom*                  m_roomHandle;
+    //std::vector<CRoom*>     m_rooms;
     volatile ClientID       m_clientIndex;
 
-    Lock                    m_roomsLock;
     Lock                    m_usersLock;
     Lock                    m_clientIndexLock;
+    
+    std::map<FN,MFP>        m_processPacket;
 
     CChatServer(const CChatServer &);
     CChatServer &operator=(const CChatServer &);
 
-    void Send_LoginOK(const CSession* user);
-    void Send_Message(const CSession* user);
-public:
-    CChatServer(){}
-    ~CChatServer();
+    void Send_LoginOK(const CSession* user,void* packetBuffer=NULL);
+    void Send_Message(const CSession* user,void* packetBuffer=NULL);
+    void Send_ChangedRoom(const CSession* user,void* packetBuffer=NULL);
+    void Send_WhisperMessage(const CSession* user,void* packetBuffer=NULL);
+    void Send_NewUser(const CSession* user,void* packetBuffer=NULL);
+    void Send_OutUser(const CSession* user,void* packetBuffer=NULL);
+    void Send_RoomUserList(const CSession* user,void* packetBuffer=NULL);
 
+public:
+    CChatServer():m_roomHandle(NULL){}
+
+    ~CChatServer() {
+      if (m_roomHandle != NULL)
+        delete m_roomHandle;
+    }
 
     void Init() override;
     void Run() override;
-    void ProcessSocketIO(void* packet,const  PacketType packIoType,const CSession& session)override;
-    void ProcessAsyncAccpet(const CSession &session);
+    void ProcessSocketIO(void* packet,const CSession& session)override;
+    void ProcessAsyncAccpet(CSession &session);
 };

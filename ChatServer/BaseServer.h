@@ -17,6 +17,6 @@ public:
 
     virtual void Init()=0;
     virtual void Run()=0;
-    virtual void ProcessSocketIO(void* packet,const PacketType packIoType,const CSession& session)=0;
-    virtual void ProcessAsyncAccpet(const CSession& session)=0;
+    virtual void ProcessSocketIO(void* packet,const CSession& session)=0;
+    virtual void ProcessAsyncAccpet(CSession& session)=0;
 };

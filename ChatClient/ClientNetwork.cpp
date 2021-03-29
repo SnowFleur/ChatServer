@@ -54,24 +54,18 @@ void SendPacket(CChatClient &client, void *packet) {
 
 void SendChatPacket(CChatClient &client, const char *message) {
   cs_message_packet packet;
-  packet.size = sizeof(packet);
-  packet.type = CS_SEND_MESSAGE;
   memcpy_s(packet.message, MESSAGE_SIZE, message, MESSAGE_SIZE);
   SendPacket(client, &packet);
 }
 
 void SendChagnedRoom(CChatClient &client,const ClientID roomNumber){
   cs_changedRoom_packet packet;
-  packet.size=sizeof(packet);
-  packet.type=CS_CHANGED_ROOM;
   packet.changed_room_number=roomNumber;
   SendPacket(client, &packet);
 }
 
 void SendWhisperMessage(CChatClient &client,const ClientID userNumber,const char* message){
   cs_whisperMessage_packet packet;
-  packet.size=sizeof(packet);
-  packet.type=CS_WHISER_MESSAGE;
   packet.userNumber=userNumber;
   memcpy_s(packet.message, MESSAGE_SIZE, message, MESSAGE_SIZE);
   SendPacket(client, &packet);

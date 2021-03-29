@@ -159,14 +159,6 @@ void CChatClient::SendPacket(void *packet) {
   WSASend(clinetSocket_, &clinetBuffer.sendWsabuf, 1, 0, 0, NULL, NULL);
 }
 
-void CChatClient::SendChat() {
-  cs_message_packet packet;
-  packet.size = sizeof(packet);
-  packet.type = CS_SEND_MESSAGE;
-
-  SendPacket(&packet);
-}
-
 void CChatClient::ProcessPakcet() {
 
   switch (clinetBuffer.packetBuffer[1]) {
@@ -201,7 +193,7 @@ void CChatClient::ProcessPakcet() {
       roomUserList_[i] = NO_RECV_NUMBER_TO_SERVER;
     }
     
-    for (size_t i = 0; i < changedRoom_packet->coundOfclient; ++i) {
+    for (size_t i = 0; i < changedRoom_packet->countOfclient; ++i) {
       roomUserList_[i] = changedRoom_packet->roomClientids[i];
     }
 

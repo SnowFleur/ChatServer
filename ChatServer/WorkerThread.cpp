@@ -26,17 +26,14 @@ DWORD CWorkerThread::DoThread(){
   //나중에 hash 혹은 다른 자료구조를 이용해 추상화 하기
   switch (overEX->ioEvent) {
     case IO_ACCEPT: {
-		  std::cout<<"Accept New Client\n";
       ProcessAccept(overEX);
       break;
     }
     case IO_RECV: {
-      std::cout<<"Recv\n";
       ProcessRecv(overEX,IoByte);
       break;
     }
     case IO_SEND: {
-      std::cout<<"Send\n";
       break;
     }
     default: {
