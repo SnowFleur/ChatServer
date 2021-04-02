@@ -4,6 +4,7 @@
 #include <map>
 #include<iostream>
 #include<cstdlib>
+#include<iomanip>
 #include<ctime>
 
 #include"StressClient.h"
@@ -90,8 +91,7 @@ void StressTest::RunSubServer(){
 
 		  if(i%5==0)std::cout<<"\n";
 
-
-		  std::cout<<"Dummy["<<i<<"]:";
+		  std::cout<<"Dummy["<<std::setw(3)<<i<<"]:";
 		  switch (m_dummys[i]->GetClientID()){
 			case DUMMY_RECY:{
 				std::cout<<"RECV        ";

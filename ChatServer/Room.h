@@ -20,7 +20,13 @@ private:
     CRoom& operator=(const CRoom&);
 public:
   CRoom(WORD roomNumber):m_rooms(roomNumber),m_currUserCountInRoom(0),
-  m_maxUserCountInRoom(MAX_ROOM_CLIENT),m_roomLock(){}
+  m_maxUserCountInRoom(MAX_ROOM_CLIENT),m_roomLock(){
+
+    for(int i=0;i<roomNumber;++i){
+      m_rooms[i].reserve(MAX_ROOM_CLIENT);
+    }
+
+  }
   
   ~CRoom(){} 
 

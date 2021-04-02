@@ -276,10 +276,7 @@ void CIocpServer::ProcessRecv(OverlappedEx *overEX,DWORD ioByte) {
     //[21.03.25] 여기부분은 진짜 네트워크 타 봐야 버그 체크 가능
     if (required <= rest) {
       //유저 버퍼에 링버퍼의 값을 복사해온다
-      Lock l;
-      l.AcquiredLock();
       memcpy_s(overEX->session->GetUserBuffer()+overEX->session->GetPrevSize(),BUFFER_SIZE,ptr,required);
-      l.ReleaseLock();
       
       //BUFFSZE_SIZE 크기만큼 링버퍼 Index 이동
       overEX->session->SetRecvBufferReadIndex(BUFFER_SIZE);

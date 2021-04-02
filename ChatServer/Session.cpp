@@ -22,7 +22,8 @@ bool CSession::DoRecv() {
                        (LPWSAOVERLAPPED)overEX, 0);
   if (recvReturn == SOCKET_ERROR) {
     if (WSAGetLastError() != WSA_IO_PENDING) {
-      std::cout << "Error: Recv  " << WSAGetLastError() << "\n";
+      std::cout << "Error: Recv  " << WSAGetLastError()<<"\n";
+      
     }
   }
   return true;
@@ -76,9 +77,11 @@ bool CSession::DoSend(void *packet) {
 
   char *p = reinterpret_cast<char *>(packet);
 
+  //이상한 패킷이 있나 체크
   if (p[0] <= 0) {
-    std::cout << "Error"
-              << "\n";
+    std::cout<<"Error packet Size Session: "<<GetClientID()<<"\n";
+
+    PostSend(NULL,0);
     return true;
   }
 

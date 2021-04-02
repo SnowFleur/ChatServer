@@ -5,6 +5,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatServer", "ChatServer\Ch
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatClient", "ChatClient\ChatClient.vcproj", "{744B0473-E7E5-4B7D-8067-2AFD358509BE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StressServer", "StressServer\StressServer.vcproj", "{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -19,6 +21,10 @@ Global
 		{744B0473-E7E5-4B7D-8067-2AFD358509BE}.Debug|Win32.Build.0 = Debug|Win32
 		{744B0473-E7E5-4B7D-8067-2AFD358509BE}.Release|Win32.ActiveCfg = Release|Win32
 		{744B0473-E7E5-4B7D-8067-2AFD358509BE}.Release|Win32.Build.0 = Release|Win32
+		{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}.Debug|Win32.Build.0 = Debug|Win32
+		{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}.Release|Win32.ActiveCfg = Release|Win32
+		{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
