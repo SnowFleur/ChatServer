@@ -29,3 +29,7 @@ struct OverlappedSendEx : public OverlappedEx {
 struct OverlappedRecvEx : public OverlappedEx {
   OverlappedRecvEx(CSession* s) : OverlappedEx(s,IO_RECV) {}
 };
+
+struct OverlappedConnetEx : public OverlappedEx {
+  OverlappedConnetEx(CSession* s) : OverlappedEx(s,IO_CONNECT) {}
+};

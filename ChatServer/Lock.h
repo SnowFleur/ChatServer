@@ -24,6 +24,6 @@ private:
   LockGuard &operator=(const LockGuard &);
 
 public:
-  LockGuard(Lock &lock) : lockGuard(lock) { lockGuard.AcquiredLock(); }
+  explicit LockGuard(Lock &lock) : lockGuard(lock) { lockGuard.AcquiredLock(); }
   ~LockGuard() { lockGuard.ReleaseLock(); }
 };

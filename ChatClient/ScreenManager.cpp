@@ -17,7 +17,9 @@ ChatInfor::ChatInfor(const ChatInfor &lhs) {
 }
 
 CScreenManager::CScreenManager() :current_line(0) {
-  for (int i = 0; i < MAX_SCREEN_LINE; ++i) {
+  
+  //테스트용 
+  for (int i = 0; i < 100; ++i) {
     screen_.push_back(ChatInfor());
   }
 
@@ -80,7 +82,7 @@ void CScreenManager::Draw() {
   // Console Clear
   // chatConsole_.cls(CConsoleLoggerEx::COLOR_BACKGROUND_BLACK);
 
-  if (current_line == MAX_SCREEN_LINE) {
+  if (current_line>MAX_SCREEN_LINE) {
     ChatInfor temp = screen_.front();
     screen_.pop_front();
     screen_.push_back(temp);
@@ -93,6 +95,7 @@ void CScreenManager::Draw() {
     chatConsole_.cprintf(CConsoleLoggerEx::COLOR_WHITE, "[Guest%d]%s",
                          screen_[i].id, screen_[i].message);
   }
+
   chatConsole_.gotoxy(0, 0);
 }
 
@@ -106,7 +109,11 @@ void CScreenManager::DrawToUserIndex(const RoomUsers& userList){
 }
 
 void CScreenManager::InsertChat(const ClientID number, const char *message) {
+  
+  if(current_line>MAX_SCREEN_LINE)return;
+
   screen_[current_line].id = number;
   char *currChar = screen_[current_line++].message;
   memcpy_s(currChar, MESSAGE_SIZE, message, MESSAGE_SIZE);
+
 }

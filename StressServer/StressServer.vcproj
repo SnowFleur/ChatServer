@@ -2,9 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="ChatServer"
-	ProjectGUID="{55DF4882-22B5-4402-8EAD-1715AD9BD77F}"
-	RootNamespace="ChatServer"
+	Name="StressServer"
+	ProjectGUID="{E18501FE-5E41-4328-A4ED-E1ABFA95C11B}"
+	RootNamespace="StressServer"
+	Keyword="Win32Proj"
 	>
 	<Platforms>
 		<Platform
@@ -19,7 +20,7 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="2"
+			CharacterSet="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -39,6 +40,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -52,7 +60,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkIncremental="2"
 				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -84,7 +95,8 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
-			CharacterSet="2"
+			CharacterSet="1"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -103,6 +115,12 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				Detect64BitPortabilityProblems="true"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -115,6 +133,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkIncremental="1"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -146,122 +170,66 @@
 	</References>
 	<Files>
 		<Filter
-			Name="main"
-			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			Name="IOCP Server"
+			>
+			<File
+				RelativePath="..\ChatServer\IocpServer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\IocpServer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Lock.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Lock.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\OverlappedEx.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Protocol.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\RingBuffer.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Session.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\Session.h"
+				>
+			</File>
+			<File
+				RelativePath="..\ChatServer\WinSocketHeader.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="StressServer"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
 				RelativePath=".\main.cpp"
 				>
 			</File>
-		</Filter>
-		<Filter
-			Name="Chat Server"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
 			<File
-				RelativePath=".\ChatServer.cpp"
+				RelativePath=".\StressClient.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ChatServer.h"
+				RelativePath=".\StressServer.h"
 				>
 			</File>
-			<File
-				RelativePath="..\ChatClient\ScreenManager.h"
-				>
-			</File>
-			<Filter
-				Name="User"
-				>
-				<File
-					RelativePath=".\User.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\User.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Room"
-				>
-				<File
-					RelativePath=".\Room.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Room.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Iocp Server"
-			>
-			<Filter
-				Name="Iocp"
-				>
-				<File
-					RelativePath=".\IocpServer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\IocpServer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="RingBuffer"
-				>
-				<File
-					RelativePath=".\RingBuffer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Session"
-				>
-				<File
-					RelativePath=".\Session.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Session.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Lock"
-				>
-				<File
-					RelativePath=".\Lock.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Lock.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Header"
-				Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-				UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-				>
-				<File
-					RelativePath=".\OverlappedEx.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Protocol.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WinSocketHeader.h"
-					>
-				</File>
-			</Filter>
 		</Filter>
 	</Files>
 	<Globals>

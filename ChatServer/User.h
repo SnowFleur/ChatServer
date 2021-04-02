@@ -6,9 +6,9 @@ class CBaseServer;
 class CUser : public CSession {
 private:
   ClientID    m_myId;
-  RoomNumber  m_currentRoomNumber;  //Room Class에서만 Write 그 외에는 X
+  volatile RoomNumber  m_currentRoomNumber;  //Room Class에서만 Write 그 외에는 X
 public:
-  CUser(CBaseServer* server):CSession(server){}
+  CUser(CIocpServer* server):CSession(server){}
   ~CUser() {}
 
   void ProcessIO() override;

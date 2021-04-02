@@ -6,7 +6,7 @@
 const int ERROR_RINGBUFFER_FULL     = -1;
 
 //최대 5개까지 받을 수 있는 크기
-const int RING_BUFFER_SIZE          = BUFFER_SIZE*10;
+const int RING_BUFFER_SIZE          = BUFFER_SIZE*100;
 
 //1 4 4 8 ? ?
 template<class T>
@@ -38,7 +38,10 @@ public:
   
 
   char *GetWriteIndex() const { return m_data + m_head; }
-  char *GetReadIndex() const { return m_data + m_tail; }
+  char *GetReadIndex(){ LockGuard lockguard(m_tailLock); return m_data + m_tail; }
+
+ 
+
   size_t GetRingBufferSize() const { return m_ringSpace; }
 
   void SetWriteIndex(const int index){

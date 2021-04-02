@@ -5,7 +5,7 @@
 #include"WinSocketHeader.h"
 #include"User.h"
 
-void CChatServer::Init() {
+void CChatServer::InitSubServer() {
   m_clientIndex=0;
 
   //생성할 방 개수
@@ -19,7 +19,7 @@ void CChatServer::Init() {
 
 }
 
-void CChatServer::Run(){
+void CChatServer::RunSubServer(){
   std::cout<<"Run Server\n";
     while(true){}
 }
@@ -43,6 +43,10 @@ void CChatServer::ProcessAsyncAccpet(CSession& user) {
 
 }
 
+CSession* CChatServer::CreateSubSession(){
+    return new CUser(this);
+}
+
 void CChatServer::ProcessSocketIO(void* packet,const CSession& session){
 
   PacketType type = reinterpret_cast<char *>(packet)[1];
@@ -55,9 +59,15 @@ void CChatServer::ProcessSocketIO(void* packet,const CSession& session){
 }
 
 void CChatServer::Send_LoginOK(const CSession *user, void *packetBuffer) {
-  sc_loginOk_packet packet;
-  packet.myNumber=user->GetClientID();
-  const_cast<CSession *>(user)->DoSend(&packet);
+  sc_loginOk_packet* packet=new sc_loginOk_packet();
+  packet->myNumber=user->GetClientID();
+  const_cast<CSession *>(user)->PushSendQueue(packet);
+
+
+  // sc_loginOk_packet packet;
+  // packet.myNumber=user->GetClientID();
+  // const_cast<CSession *>(user)->PushSendQueue(&packet);
+
 }
 
 void CChatServer::Send_Message(const CSession *user, void *packetBuffer) {
@@ -72,24 +82,63 @@ void CChatServer::Send_Message(const CSession *user, void *packetBuffer) {
   std::cout << "\n";
 #endif
 
-  sc_message_packet packet;
+  // sc_message_packet packet;
+  // // message Copy
+  // memcpy_s(packet.message, MESSAGE_SIZE, message_packet->message, MESSAGE_SIZE);
+  // // Insert User number
+  // packet.id = user->GetClientID();
+  //m_roomHandle->SendAllMessageInRoom(user, &packet,true);
+
+
+  sc_message_packet* packet=new sc_message_packet();
   // message Copy
-  memcpy_s(packet.message, MESSAGE_SIZE, message_packet->message, MESSAGE_SIZE);
+  memcpy_s(packet->message, MESSAGE_SIZE, message_packet->message, MESSAGE_SIZE);
   // Insert User number
-  packet.id = user->GetClientID();
+  packet->id = user->GetClientID();
 
   // 자기가 들어가 있는 방에 Broad Cast
-  m_roomHandle->SendAllMessageInRoom(user, &packet);
+  m_roomHandle->SendAllMessageInRoom(user, packet,true);
 }
 
- //나중에 다시 수정하기 로직이 넘 이상
 void CChatServer::Send_ChangedRoom(const CSession* user,void* packetBuffer){
 
   cs_changedRoom_packet *changedRoom_packet =
       reinterpret_cast<cs_changedRoom_packet *>(packetBuffer);
 
-  //해당 유저의 퇴장을 보냄(OLD) -->버그
   m_roomHandle->ChangedRoom(user, changedRoom_packet->changed_room_number);
 }
 
-void CChatServer::Send_WhisperMessage(const CSession* user,void* packetBuffer){}
+void CChatServer::Send_WhisperMessage(const CSession* user,void* packetBuffer){
+
+
+ cs_whisperMessage_packet*whisperMessage =
+      reinterpret_cast<cs_whisperMessage_packet *>(packetBuffer);
+
+  LockGuard lockguard(m_usersLock);
+
+  UsersIter findIter=m_users.end();
+
+  for (UsersIter iter = m_users.begin(); iter != m_users.end(); ++iter) {
+
+    if ((*iter)->GetClientID() == whisperMessage->userNumber) {
+      findIter = iter;
+      break;
+    }
+  }
+
+  if(findIter!=m_users.end()){
+
+    // sc_message_packet packet;
+    // packet.id=user->GetClientID();
+    // memcpy_s(packet.message,BUFFER_SIZE,whisperMessage->message,BUFFER_SIZE);
+    // (*findIter)->OnSend(&packet);
+
+
+    sc_message_packet* packet=new sc_message_packet();
+    packet->id=user->GetClientID();
+    memcpy_s(packet->message,BUFFER_SIZE,whisperMessage->message,BUFFER_SIZE);
+    (*findIter)->PushSendQueue(packet);
+    
+  }
+
+}

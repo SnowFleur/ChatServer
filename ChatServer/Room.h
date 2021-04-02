@@ -42,5 +42,4 @@ public:
   void SendOutUserInRoom(const CSession* user);
   void SendRoomInfor(const CSession* user);
   void SendRoomInfor(const RoomNumber roomNumber);
-
 };

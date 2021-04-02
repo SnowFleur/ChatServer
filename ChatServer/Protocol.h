@@ -7,8 +7,8 @@ const int           SERVER_PORT         = 9000;
 const int           BUFFER_SIZE         = 1024;
 const int           MESSAGE_SIZE        = 50;
 const int           MAX_CLIENT          = 10000;
-const int           MAX_ROOM_CLIENT     = 7;  
-const RoomNumber    CHAT_ROOM_COUNT     = 6;  
+const int           MAX_ROOM_CLIENT     = 70;
+const RoomNumber    CHAT_ROOM_COUNT     = 6;      //Ã¤ÆÃ¹æ °¹¼ö
 
 namespace PACKET_TYPE {
 

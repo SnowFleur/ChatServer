@@ -2,15 +2,13 @@
 #include <vector>
 #include <map>
 #include"DataDefine.h"
-#include"BaseServer.h"
-#include"Lock.h"
+#include"IocpServer.h"
 
 // 이 클래스가 채팅의 모든걸 관리한다.
 class CRoom;
 class CSession;
-class CUser;
 
-class CChatServer : public CBaseServer {
+class CChatServer : public CIocpServer {
 
     typedef std::vector<CSession*>::iterator        UsersIter;
     typedef std::vector<CSession*>::const_iterator  ConstUsersIter;
@@ -24,7 +22,6 @@ class CChatServer : public CBaseServer {
 private:
     std::vector<CSession*>  m_users;
     CRoom*                  m_roomHandle;
-    //std::vector<CRoom*>     m_rooms;
     volatile ClientID       m_clientIndex;
 
     Lock                    m_usersLock;
@@ -42,15 +39,19 @@ private:
     void Send_LoginOK(const CSession* user,void* packetBuffer=NULL);
 
 public:
-    CChatServer():m_roomHandle(NULL){}
+    void InitSubServer() override;
+    void RunSubServer() override;
+    void ProcessAsyncAccpet(CSession &session)override;
+    void ProcessSocketIO(void* packet,const CSession& session)override;
+    CSession* CreateSubSession()override; 
+
+    CChatServer():
+    CIocpServer(this),
+    m_roomHandle(NULL){}
 
     ~CChatServer() {
       if (m_roomHandle != NULL)
         delete m_roomHandle;
     }
 
-    void Init() override;
-    void Run() override;
-    void ProcessSocketIO(void* packet,const CSession& session)override;
-    void ProcessAsyncAccpet(CSession &session);
 };

@@ -39,8 +39,8 @@ void CChatClient::Run(SOCKET_TYPE socketType) {
   event_ = WSACreateEvent();
   WSAEventSelect(clinetSocket_, event_, FD_READ | FD_WRITE | FD_CLOSE);
 
-  u_long nonBlockingMode = 1;
-  ioctlsocket(clinetSocket_, FIONBIO, &nonBlockingMode);
+  // u_long nonBlockingMode = 1;
+  // ioctlsocket(clinetSocket_, FIONBIO, &nonBlockingMode);
 
   CScreenManager::GetInstance();
   ProcessChatting();
@@ -77,7 +77,7 @@ void CChatClient::ProcessChatting() {
       fgets(temp, MESSAGE_SIZE - 2, stdin);
 
       if (temp[0] == '\n') {
-        //std::cout << "Push \n";
+        std::cout << "Push \n";
       }
 
       else if (strcmp(temp, "!Insert\n") == 0) {
