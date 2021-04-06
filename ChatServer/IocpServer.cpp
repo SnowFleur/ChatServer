@@ -86,7 +86,6 @@ bool CIocpServer::StartWorkerThread() {
   // if(_beginthreadex(NULL, 0, &CIocpServer::WinCreateNetworkThread, this, 0, NULL)==-1)
   //   std::cout<<"Error: Not Create Thread\n";
 
-
   //Server Start!!
   InitSubServer();
   RunSubServer();

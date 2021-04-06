@@ -88,9 +88,8 @@ void CRoom::SendAllMessageInRoom(const CSession* user, void* packet,bool ignoreM
   //본인이 들어가있는 방에 모두 전송
  for (RoomIter iter = m_rooms[number].begin(); iter != m_rooms[number].end(); ++iter) {
 
-   //여기서 버그가 터짐 뭐지?
    if(ignoreMe)
-	  //if((*iter)->GetClientID()==user->GetClientID())continue;
+	  if((*iter)->GetClientID()==user->GetClientID())continue;
 
     (*iter)->PushSendQueue(packet);
   }

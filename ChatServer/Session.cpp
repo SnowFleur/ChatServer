@@ -51,25 +51,23 @@ void CSession::PostSend(void *packet, DWORD ioByte) {
 
     // SendQueue Pop
     LockGuard LockGuard(m_sendQueueLock);
-    
-	//일단 패스
-	//  delete m_sendQueue.front();
+
+   // std::cout << "Before Delete\n";
+   // delete m_sendQueue.front();
+   // std::cout << "After Delete\n";
     m_sendQueue.pop();
 
     // Queue가 남아있다면 다음꺼 전송
     if (m_sendQueue.empty() == false) {
       DoSend(m_sendQueue.front());
     }
+
     //아니라면 sendComplet true
     else {
       m_sendComplte = true;
     }
   }
 }
-
-/*
-여기서 큐에 있는 데이터를 가져와서 WSASend를 실행시키고
-*/
 
 bool CSession::DoSend(void *packet) {
   DWORD dwBytes = 0, dwFlags = 0;

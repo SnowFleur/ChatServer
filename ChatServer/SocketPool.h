@@ -6,16 +6,16 @@
 #include"Lock.h"
 
 
-class CSocketPoo{
+class CSocketPool{
 private:
     std::queue<SOCKET>  m_freeSocketList;
     size_t              m_poolSize;
     Lock                m_freeListLock;    
 
-    CSocketPoo(const CSocketPoo&);
-    CSocketPoo& operator=(const CSocketPoo&);
+    CSocketPool(const CSocketPool&);
+    CSocketPool& operator=(const CSocketPool&);
 public:
-    CSocketPoo(size_t SocketPooSize):
+    CSocketPool(size_t SocketPooSize):
     m_poolSize(SocketPooSize),
     m_freeSocketList(){
 
@@ -25,7 +25,7 @@ public:
             m_freeSocketList.push(temp);  
         }
     }
-    ~CSocketPoo() {
+    ~CSocketPool() {
 
       while (m_freeSocketList.empty() == false) {
         SOCKET temp = m_freeSocketList.front();

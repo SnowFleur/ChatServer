@@ -168,10 +168,6 @@
 				RelativePath=".\ChatServer.h"
 				>
 			</File>
-			<File
-				RelativePath="..\ChatClient\ScreenManager.h"
-				>
-			</File>
 			<Filter
 				Name="User"
 				>
@@ -259,6 +255,14 @@
 				</File>
 				<File
 					RelativePath=".\WinSocketHeader.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="ObjectPool"
+				>
+				<File
+					RelativePath=".\ObjectPool.h"
 					>
 				</File>
 			</Filter>

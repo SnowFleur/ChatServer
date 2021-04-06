@@ -65,7 +65,7 @@ void StressTest::RunSubServer(){
   while (true) {
 
     // 1초에 한번씩 Chat Server연결 시도
-    Sleep(1000);
+    //Sleep(1000);
 
     if (dummyCount < COUNT_OF_DUMMY) {
 
@@ -115,7 +115,6 @@ void StressTest::RunSubServer(){
 				break;
 		  }
 
-
 	  }
 
   }
@@ -127,7 +126,7 @@ void StressTest::ProcessSocketIO(void *packet, const CSession &session) {
   //다시 Recv
   const_cast<CSession &>(session).DoRecv();
   const_cast<CSession&>(session).SetClientID(DUMMY_RECY);
-  Sleep(500);
+  //Sleep(500);
 
   const_cast<CSession&>(session).SetClientID(DUMMY_MESSAGE);
   //다시 Send
@@ -138,12 +137,12 @@ void StressTest::ProcessSocketIO(void *packet, const CSession &session) {
     break;
     }
   case 1: {
-    const char temp[25] = "Life Is Hard\n";
+    const char temp[25] = "Is it safe?\n";
     Send_Message(const_cast<CSession *>(&session), (void *)temp);
     break;
     }
   case 2: {
-    const char temp[25] = "WA SEND!\n";
+    const char temp[25] = "Show me the money!\n";
     Send_Message(const_cast<CSession *>(&session), (void *)temp);
     break;
     }
@@ -226,6 +225,4 @@ DWORD StressTest::DoThread(){
 
    _endthreadex( 0 );
   return 0;
-
-
 }

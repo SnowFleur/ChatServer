@@ -1,14 +1,36 @@
 #include <iostream>
 #include"ChatServer.h"
 /*
-- Send는 잘려올 수 있다.
+- Send는 잘려서 보낼 수 있다...
 - 내부버퍼가 꽉 차면 Server가 죽을 수 있으니 카운터를 가지고 횟수를 제한.
 - 
 */
-
 class CIocpServer;
 
+// #include"ObjectPool.h"
+
+// struct OverlappedEx:public CObjectManager<CFixedMemoryBlock>{
+//   OVERLAPPED    overlapped;
+//   WSABUF        wsabuf;
+//   IO_EVENT      ioEvent;
+//   CSession*     session;
+
+//   OverlappedEx(CSession* s,IO_EVENT io) : session(NULL), ioEvent(io){
+//     ZeroMemory(&overlapped, sizeof(overlapped));
+//     session=s;
+//   }
+// };
+
+// struct OverlappedAcceptEx : public OverlappedEx {
+//   OverlappedAcceptEx(CSession* s) : OverlappedEx(s,IO_ACCEPT){
+//     wsabuf.buf = NULL;
+//     wsabuf.len = 0;
+//   }
+// };
+
+
 int main() {
+
 
   CIocpServer *iocpServerHandle = NULL;
   iocpServerHandle = new CChatServer();

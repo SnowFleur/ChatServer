@@ -1,6 +1,9 @@
 #pragma once
 #include "WinSocketHeader.h"
 
+
+const int MAX_SPIN_COUNT=4000;
+
 struct Lock {
 private:
   CRITICAL_SECTION cs;
