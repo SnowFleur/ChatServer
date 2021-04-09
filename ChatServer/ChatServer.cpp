@@ -17,6 +17,9 @@ void CChatServer::InitSubServer() {
 	//생성할 방 개수
 	m_roomHandle = std::make_unique<CRoom>(CHAT_ROOM_COUNT);
 
+	//packet factory 생성
+	m_packetFactory = std::make_unique<CPacketPoolFactory>();
+
 	// 패킷 프로세스 등록
 	m_processPacket.emplace(PairProcessPacket(PACKET_TYPE::CS_SEND_MESSAGE, &CChatServer::Send_Message));
 	m_processPacket.emplace(PairProcessPacket(PACKET_TYPE::CS_CHANGED_ROOM, &CChatServer::Send_ChangedRoom));
@@ -64,10 +67,12 @@ void CChatServer::ProcessSocketIO(void* packet, const CSession& session) {
 }
 
 void CChatServer::Send_LoginOK(const CSession* user, void* packetBuffer) {
+
+	//auto packet = m_packetFactory->CraetePacket(PACKET_TYPE::SC_LOGIN_OK);
+	
 	sc_loginOk_packet* packet = new sc_loginOk_packet();
 	packet->myNumber = user->GetClientID();
 	const_cast<CSession*>(user)->PushSendQueue(packet);
-
 
 	// sc_loginOk_packet packet;
 	// packet.myNumber=user->GetClientID();

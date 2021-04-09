@@ -1,21 +1,15 @@
 #pragma once
-#define SERVER_ADDR "127.0.0.1"
+#include"IOCP_DataDefine.h"
 
+using ClientID		= short;
+using RoomNumber	= short;
 
-using PacketSize		= char;
-using PacketType		= char;
-using ClientID			= short;
-using RoomNumber		= short;
-
-constexpr int SERVER_PORT		= 9000;
-constexpr int BUFFER_SIZE		= 1024;
 constexpr int MESSAGE_SIZE		= 50;
-constexpr int MAX_CLIENT		= 10000;
-constexpr int MAX_ROOM_CLIENT	= 5000;
+constexpr int MAX_CLIENT		=3000;
+constexpr int MAX_ROOM_CLIENT	= 4000;
 
-constexpr RoomNumber CHAT_ROOM_COUNT	= 6;
-constexpr ClientID DEFAULT_CLINET_ID	= -999;
-
+constexpr RoomNumber CHAT_ROOM_COUNT = 6;
+constexpr ClientID DEFAULT_CLINET_ID = -999;
 
 namespace PACKET_TYPE {
 
@@ -33,18 +27,19 @@ namespace PACKET_TYPE {
 
 
 #pragma pack(push, 1)
+//잠재적 문제: unsigned int(4바이트) -> PacketSize(1바이트) Overflow
 
-class PacketHeader {
+struct PacketHeader {
 private:
 	PacketSize size;
 	PacketType type;
 public:
+	PacketHeader() {}
 	PacketHeader(PacketSize s, PacketType t) : size(s), type(t) {}
 };
 
 // Server ----> Client
-class sc_loginOk_packet : public PacketHeader {
-public:
+struct sc_loginOk_packet : public PacketHeader {
 	ClientID myNumber;
 
 	sc_loginOk_packet() :
@@ -53,8 +48,7 @@ public:
 		myNumber{ DEFAULT_CLINET_ID }{}
 };
 
-class sc_message_packet : public PacketHeader {
-public:
+struct sc_message_packet : public PacketHeader {
 
 	ClientID id;
 	char message[MESSAGE_SIZE];
@@ -66,8 +60,7 @@ public:
 		message{}{}
 };
 
-class sc_newUser_packet :public PacketHeader {
-public:
+struct sc_newUser_packet :public PacketHeader {
 
 	ClientID new_userNumber;
 
@@ -77,8 +70,7 @@ public:
 		new_userNumber{ DEFAULT_CLINET_ID }{}
 };
 
-class sc_changedRoom_packet :public PacketHeader {
-public:
+struct sc_changedRoom_packet :public PacketHeader {
 
 	ClientID    roomClientids[MAX_ROOM_CLIENT];
 	size_t      countOfclient;
@@ -90,8 +82,7 @@ public:
 		countOfclient() {}
 };
 
-class sc_outUser_packet :public PacketHeader {
-public:
+struct sc_outUser_packet :public PacketHeader {
 
 	ClientID out_userNumber;
 
@@ -102,9 +93,7 @@ public:
 };
 
 // Client----> Server
-class cs_message_packet :public PacketHeader {
-public:
-
+struct cs_message_packet :public PacketHeader {
 	char message[MESSAGE_SIZE];
 
 	cs_message_packet() :
@@ -113,9 +102,7 @@ public:
 		message{}{}
 };
 
-class cs_changedRoom_packet :public PacketHeader {
-public:
-
+struct cs_changedRoom_packet :public PacketHeader {
 	RoomNumber changed_room_number;
 
 	cs_changedRoom_packet() :
@@ -124,8 +111,7 @@ public:
 		changed_room_number{ DEFAULT_CLINET_ID }{}
 };
 
-class cs_whisperMessage_packet :public PacketHeader {
-public:
+struct cs_whisperMessage_packet :public PacketHeader {
 
 	ClientID userNumber;
 	char message[MESSAGE_SIZE];

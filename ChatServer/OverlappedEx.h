@@ -9,6 +9,7 @@ public:
 	WSABUF			wsabuf;
 	IO_EVENT		ioEvent;
 	CSession*		session;
+
 	char			m_buffer[BUFFER_SIZE];
 
 	OverlappedEx(CSession* s, IO_EVENT io) : session(NULL), ioEvent(io) {
