@@ -2,12 +2,13 @@
 #include "..\ChatServer\Protocol.h"
 #include <iostream>
 #include <locale.h>
-CScreenManager *CScreenManager::handle_ = NULL;
 
-ChatInfor::ChatInfor() : id(NO_RECV_NUMBER_TO_SERVER), message(NULL) {}
+CScreenManager *CScreenManager::handle_ = nullptr;
+
+ChatInfor::ChatInfor() : id(NO_RECV_NUMBER_TO_SERVER), message(nullptr) {}
 
 ChatInfor::~ChatInfor() {
-  if (message != NULL)
+  if (message != nullptr)
     delete[] message;
 }
 
@@ -29,7 +30,7 @@ CScreenManager::CScreenManager() :current_line(0) {
 }
 
 CScreenManager *CScreenManager::GetInstance() {
-  if (handle_ == NULL) {
+  if (handle_ == nullptr) {
     handle_ = new CScreenManager();
   }
   return handle_;
@@ -100,8 +101,8 @@ void CScreenManager::Draw() {
 }
 
 void CScreenManager::DrawToUserIndex(const RoomUsers& userList){
-
-  for (int i = 0; i < MAX_ROOM_CLIENT; ++i) {
+    
+  for (int i = 0; i < 10; ++i) {
     if(userList[i]==NO_RECV_NUMBER_TO_SERVER)continue;
     chatConsole_.gotoxy(USER_LIST_X,USER_LIST_Y+(i+1)*2);
         chatConsole_.cprintf(CConsoleLoggerEx::COLOR_WHITE |CConsoleLoggerEx::COLOR_BACKGROUND_GREEN,"[Guest%d]",userList[i]);

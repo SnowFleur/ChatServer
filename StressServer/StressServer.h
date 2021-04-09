@@ -9,7 +9,7 @@
 
 #include"StressClient.h"
 #include"..\ChatServer\WinSocketHeader.h"
-#include "..\ChatServer\IocpServer.h"
+#include"..\ChatServer\IocpServer.h"
 #include"..\ChatServer\Protocol.h"
 #include"..\ChatServer\Lock.h"
 #include"..\ChatServer\Session.h"
@@ -53,15 +53,9 @@ void StressTest::InitSubServer(){
 
 void StressTest::RunSubServer(){
 
-  SOCKADDR_IN serverAddr;
-  ZeroMemory(&serverAddr, sizeof(serverAddr));
-  serverAddr.sin_port = SERVER_PORT;
-  serverAddr.sin_family = PF_INET;
-  serverAddr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
-
 
   static int dummyCount = 0;
-
+ 
   while (true) {
 
     // 1초에 한번씩 Chat Server연결 시도
@@ -70,52 +64,52 @@ void StressTest::RunSubServer(){
     if (dummyCount < COUNT_OF_DUMMY) {
 
       CSession *session = CreateSubSession();
+      OverlappedConnetEx* overEx=new OverlappedConnetEx(session);
 
-      if (connect(session->GetSocket(),
-                  reinterpret_cast<SOCKADDR *>(&serverAddr),
-                  sizeof(serverAddr)) == SOCKET_ERROR) {
-        std::cout << "connect Error: " << WSAGetLastError() << "\n";
-      }
-      session->SetClientID(DUMMY_ACCEPT);
-      RegitSocketInIOCP(session->GetSocket(), GetIOCPHandle());
-      session->DoRecv();
-      m_dummys.push_back(session);
+      PostQueuedCompletionStatus(GetIOCPHandle(),5,0, (LPWSAOVERLAPPED)(overEx));
+
+  
+	  session->SetClientID(DUMMY_ACCEPT);
+	  RegitSocketInIOCP(session->GetSocket(), GetIOCPHandle());
+	  m_dummys.push_back(session);
+
       ++dummyCount;
     }
 
       system("cls");
       std::cout << "Count Of Clinet:" << dummyCount << "\n";
+     // std::cout << "Count Of Coonect Error:" << ConnectErrorCount<<"Error Code: "<<lastError<< "\n";
 
-	  //출력은 단일이기 때문에 Lock X 
-	  for(int i=0;i<m_dummys.size();++i){
 
-		  if(i%5==0)std::cout<<"\n";
+	  // 출력은 단일이기 때문에 Lock X 
+	   //for(int i=0;i<m_dummys.size();++i){
 
-		  std::cout<<"Dummy["<<std::setw(3)<<i<<"]:";
-		  switch (m_dummys[i]->GetClientID()){
-			case DUMMY_RECY:{
-				std::cout<<"RECV        ";
-				break;
-		  }
-			case DUMMY_MESSAGE:{
-				std::cout<<"MESSAGE     ";
-				break;
-		  }
-			case DUUMY_CHANG_ROOM:{
-				std::cout<<"CHANGE ROOM ";
-				break;
-		  }
-			case DUMMY_ACCEPT:{
-				std::cout<<"ACCEPT      ";
-				break;
-		  }
+		  // if(i%5==0)std::cout<<"\n";
 
-			default:
-				std::cout<<"Error\n";
-				break;
-		  }
+		  // std::cout<<"Dummy["<<std::setw(3)<<i<<"]:";
+		  // switch (m_dummys[i]->GetClientID()){
+		 	//case DUMMY_RECY:{
+		 	//	std::cout<<"RECV        ";
+		 	//	break;
+		  // }
+		 	//case DUMMY_MESSAGE:{
+		 	//	std::cout<<"MESSAGE     ";
+		 	//	break;
+		  // }
+		 	//case DUUMY_CHANG_ROOM:{
+		 	//	std::cout<<"CHANGE ROOM ";
+		 	//	break;
+		  // }
+		 	//case DUMMY_ACCEPT:{
+		 	//	std::cout<<"ACCEPT      ";
+		 	//	break;
+		  // }
 
-	  }
+		 	//default:
+		 	//	std::cout<<"Error\n";
+		 	//	break;
+		  // }
+	   //}
 
   }
 
@@ -123,10 +117,8 @@ void StressTest::RunSubServer(){
 
 void StressTest::ProcessSocketIO(void *packet, const CSession &session) {
 
-  //다시 Recv
-  const_cast<CSession &>(session).DoRecv();
-  const_cast<CSession&>(session).SetClientID(DUMMY_RECY);
-  //Sleep(500);
+
+//  Sleep(10);
 
   const_cast<CSession&>(session).SetClientID(DUMMY_MESSAGE);
   //다시 Send
@@ -176,19 +168,26 @@ void StressTest::Changed_Room(CSession *user, void *packetBuffer) {
 DWORD StressTest::DoThread(){
   HANDLE iocpHandle = GetIOCPHandle();
   DWORD IoByte;
-  LPOVERLAPPED  overlapped=NULL;
+  LPOVERLAPPED  overlapped=nullptr;
   bool          IoEventResult=true;
 #ifdef _WIN64
   ULONGLONG Iokey;
 #else
   ULONG Iokey;
 #endif //  _WIN64
+
+  SOCKADDR_IN serverAddr;
+  ZeroMemory(&serverAddr, sizeof(serverAddr));
+  serverAddr.sin_port = SERVER_PORT;
+  serverAddr.sin_family = PF_INET;
+  serverAddr.sin_addr.S_un.S_addr = inet_addr(SERVER_ADDR);
+
   while (true) {
 
    //GQCS를 넘어가고 Handle 값이 사라짐? ---> local 하게 해서 해결
    IoEventResult = GetQueuedCompletionStatus(iocpHandle, &IoByte, &Iokey,&overlapped,INFINITE);
     if (IoEventResult == false) {
-      if (overlapped == false && WSAGetLastError() != 64) {
+      if (overlapped == nullptr && WSAGetLastError() != 64) {
         std::cout << WSAGetLastError() << "\n";
         return 0;
       }
@@ -203,10 +202,30 @@ DWORD StressTest::DoThread(){
       overEX->session->ProcessIO();
       break;
     }
-    case IO_CONNECT:{
+    case IO_CONNECT: {
+
+      static int ConnectErrorCount = 0;
+      static int lastError = 0;
+
+      if (connect(overEX->session->GetSocket(),
+                  reinterpret_cast<SOCKADDR *>(&serverAddr),
+                  sizeof(serverAddr)) == SOCKET_ERROR) {
+        std::cout << "connect Error: " << WSAGetLastError() << "\n";
+        lastError = WSAGetLastError();
+        ++ConnectErrorCount;
+      }
+      else{
+          overEX->session->DoRecv();
+          overEX->session->SetClientID(DUMMY_RECY);
+      }
       break;
     }
     case IO_SEND: {
+        //다시 Recv
+        overEX->session->DoRecv();
+        overEX->session->SetClientID(DUMMY_RECY);
+       /* const_cast<CSession&>(session).DoRecv();
+        const_cast<CSession&>(session).SetClientID(DUMMY_RECY);*/
       break;
     }
     default: {

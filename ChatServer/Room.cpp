@@ -1,8 +1,17 @@
 #include <algorithm>
-
 #include "Room.h"
 #include"Session.h"
 #include"User.h"
+
+CRoom::CRoom(WORD roomNumber) :m_rooms(roomNumber), m_currUserCountInRoom(0),
+m_maxUserCountInRoom(MAX_ROOM_CLIENT), m_roomLock() {
+
+    for (int i = 0;i < roomNumber;++i) {
+        m_rooms[i].reserve(MAX_ROOM_CLIENT);
+    }
+
+}
+
 
 bool CRoom::InsertUserInRoom(CSession *user,const RoomNumber roomNumber) {
 
@@ -62,7 +71,7 @@ void CRoom::CopyAllUserInRoom(const CSession* user,ClientID* roomClientids,size_
   // 이거는 함수를 타야하기 때문에 한번에 Read X
   countOfClinet = m_rooms[number].size();
 
-  for (int i = 0; i < m_rooms[number].size(); ++i) {
+  for (size_t i = 0; i < m_rooms[number].size(); ++i) {
     roomClientids[i] =  m_rooms[number][i]->GetClientID();
   }
 
@@ -72,7 +81,7 @@ void CRoom::CopyAllUserInRoom(const RoomNumber roomNumber,ClientID* roomClientid
   LockGuard lockGuard(m_roomLock);
 
   countOfClinet = m_rooms[roomNumber].size();
-  for (int i = 0; i < m_rooms[roomNumber].size(); ++i) {
+  for (size_t i = 0; i < m_rooms[roomNumber].size(); ++i) {
     roomClientids[i] =  m_rooms[roomNumber][i]->GetClientID();
   }
 

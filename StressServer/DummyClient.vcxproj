@@ -18,28 +18,11 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\ChatServer\Lock.cpp" />
-    <ClCompile Include="ChatClient.cpp" />
-    <ClCompile Include="ClientNetwork.cpp" />
-    <ClCompile Include="ConsoleLogger.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="ScreenManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\ChatServer\Lock.h" />
-    <ClInclude Include="..\ChatServer\RingBuffer.h" />
-    <ClInclude Include="..\ChatServer\WinSocketHeader.h" />
-    <ClInclude Include="ChatClient.h" />
-    <ClInclude Include="ClientNetwork.h" />
-    <ClInclude Include="ConsoleLogger.h" />
-    <ClInclude Include="ScreenManager.h" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{c3f7aee8-ed5a-4a9d-a155-12461ac17ec0}</ProjectGuid>
-    <RootNamespace>ChatClient</RootNamespace>
+    <ProjectGuid>{41a34782-9c8d-4923-9bf4-60b439429448}</ProjectGuid>
+    <RootNamespace>DummyClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -47,14 +30,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -155,6 +138,20 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ChatServer\IocpServer.cpp" />
+    <ClCompile Include="..\ChatServer\Lock.cpp" />
+    <ClCompile Include="..\ChatServer\Session.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ChatServer\IocpServer.h" />
+    <ClInclude Include="..\ChatServer\Lock.h" />
+    <ClInclude Include="..\ChatServer\Session.h" />
+    <ClInclude Include="..\ChatServer\WinSocketHeader.h" />
+    <ClInclude Include="StressClient.h" />
+    <ClInclude Include="StressServer.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

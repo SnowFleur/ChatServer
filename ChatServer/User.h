@@ -1,15 +1,19 @@
 #pragma once
 #include"Session.h"
-#include"DataDefine.h"
 class CBaseServer;
 
 class CUser : public CSession {
 private:
-  ClientID    m_myId;
-  volatile RoomNumber  m_currentRoomNumber;  //Room Class에서만 Write 그 외에는 X
+	ClientID    m_myId;
+
+	//Room Class에서만 Write 그 외에는 X
+	std::atomic<RoomNumber>	m_atRoomNumber;
 public:
-  CUser(CIocpServer* server):CSession(server){}
-  ~CUser() {}
+	CUser(CIocpServer* server) :
+		CSession(server),
+		m_atRoomNumber{} {}
+
+	~CUser() = default;
 
   void ProcessIO() override;
   void ProcessPacket(void *packet);
@@ -17,7 +21,7 @@ public:
   ClientID GetClientID()const override{return m_myId;}
   void     SetClientID(const ClientID id )override{m_myId=id;}
 
-  inline RoomNumber GetCurrentRoomNumber()const{return m_currentRoomNumber;}
-  inline void SetCurrentRoomNumber(const RoomNumber number){m_currentRoomNumber=number;}
+  inline  const std::atomic<RoomNumber>& GetCurrentRoomNumber()const{return m_atRoomNumber;}
+  inline void SetCurrentRoomNumber(const  std::atomic<RoomNumber>number) { m_atRoomNumber.store(number); }
 
 };

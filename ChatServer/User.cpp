@@ -3,8 +3,14 @@
 #include"ChatServer.h"
 
 
-void CUser::ProcessIO(){
-    ProcessPacket(GetUserBuffer());
+void CUser::ProcessIO() {
+#ifdef _USED_RING_BUFFER
+	ProcessPacket(GetUserBuffer());
+#else
+	char buffer[BUFFER_SIZE];
+	memcpy_s(buffer, BUFFER_SIZE, GetUserBuffer(), BUFFER_SIZE);
+	ProcessPacket(buffer);
+#endif
 }
 
 void CUser::ProcessPacket(void* packet){

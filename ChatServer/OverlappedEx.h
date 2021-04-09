@@ -3,33 +3,39 @@
 
 class CSession;
 
-struct OverlappedEx {
-  OVERLAPPED    overlapped;
-  WSABUF        wsabuf;
-  IO_EVENT      ioEvent;
-  CSession*     session;
+class OverlappedEx {
+public:
+	OVERLAPPED		overlapped;
+	WSABUF			wsabuf;
+	IO_EVENT		ioEvent;
+	CSession*		session;
+	char			m_buffer[BUFFER_SIZE];
 
-  OverlappedEx(CSession* s,IO_EVENT io) : session(NULL), ioEvent(io){
-    ZeroMemory(&overlapped, sizeof(overlapped));
-    session=s;
-  }
+	OverlappedEx(CSession* s, IO_EVENT io) : session(NULL), ioEvent(io) {
+		ZeroMemory(&overlapped, sizeof(overlapped));
+		session = s;
+	}
 };
 
-struct OverlappedAcceptEx : public OverlappedEx {
-  OverlappedAcceptEx(CSession* s) : OverlappedEx(s,IO_ACCEPT){
-    wsabuf.buf = NULL;
-    wsabuf.len = 0;
-  }
+class OverlappedAcceptEx : public OverlappedEx {
+public:
+	OverlappedAcceptEx(CSession* s) : OverlappedEx(s, IO_ACCEPT) {
+		wsabuf.buf = NULL;
+		wsabuf.len = 0;
+	}
 };
 
-struct OverlappedSendEx : public OverlappedEx {
-  OverlappedSendEx(CSession* s) : OverlappedEx(s,IO_SEND) {}
+class OverlappedSendEx : public OverlappedEx {
+public:
+	OverlappedSendEx(CSession* s) : OverlappedEx(s, IO_SEND) {}
 };
 
-struct OverlappedRecvEx : public OverlappedEx {
-  OverlappedRecvEx(CSession* s) : OverlappedEx(s,IO_RECV) {}
+class OverlappedRecvEx : public OverlappedEx {
+public:
+	OverlappedRecvEx(CSession* s) : OverlappedEx(s, IO_RECV) {}
 };
 
-struct OverlappedConnetEx : public OverlappedEx {
-  OverlappedConnetEx(CSession* s) : OverlappedEx(s,IO_CONNECT) {}
+class OverlappedConnetEx : public OverlappedEx {
+public:
+	OverlappedConnetEx(CSession* s) : OverlappedEx(s, IO_CONNECT) {}
 };

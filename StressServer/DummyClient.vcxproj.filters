@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="StressServer">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="StressClinet">
+      <UniqueIdentifier>{de6cf444-e87d-4560-a602-9fced3173d14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{f01c9c1f-dd36-45c1-a61d-d00f08a17c0e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="StressClient.h">
+      <Filter>StressServer</Filter>
+    </ClInclude>
+    <ClInclude Include="StressServer.h">
+      <Filter>StressServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChatServer\Lock.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChatServer\WinSocketHeader.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChatServer\Session.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChatServer\IocpServer.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>StressClinet</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChatServer\Lock.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChatServer\Session.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChatServer\IocpServer.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

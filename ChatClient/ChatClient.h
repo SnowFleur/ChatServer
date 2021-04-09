@@ -1,9 +1,10 @@
 #pragma once
+
 #include "ClientNetwork.h"
-#include "ScreenManager.h"
+#include"ScreenManager.h"
 #include"..\ChatServer\RingBuffer.h"
 
-static char MainConsoleTitle;
+//static const char MainConsoleTitle[5];
 
 struct Buffer {
     WSABUF                m_recvWsabuf;
@@ -26,8 +27,6 @@ private:
   void InitSocket(const SOCKET_TYPE);
   void ProcessChatting();
   void SendPacket(void* packet);
-  void JoinInRoom();
-  void OutInRoom();
 public:
   SOCKET        clinetSocket_;
   Buffer        clinetBuffer;

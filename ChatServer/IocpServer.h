@@ -28,9 +28,6 @@ private:
     CIocpServer*                  m_subServerComponent;
     DWORD                         m_workthreadCount;
  
-    CIocpServer(const CIocpServer&);
-    CIocpServer& operator=(const CIocpServer&);
-
     void ReleaseWorkerThreadHandle();
     void WaitForWorkerThreads();
 
@@ -38,25 +35,31 @@ private:
     virtual DWORD DoThread();
     static unsigned int WINAPI WinCreateWorkerThread(LPVOID lpParam);
 
-    virtual DWORD SendThread();
-    static unsigned int WINAPI WinCreateNetworkThread(LPVOID lpParam);
-    
-
     //Main Class used Functions
     void  ProcessAccept(OverlappedEx* overEX,HANDLE iocpHandle);
     void  ProcessRecv(OverlappedEx* overEX,DWORD ioByte);
-    void  ProcessSend(OverlappedEx* overEX,DWORD ioByte);
     void  AsyncAccept();
 
     std::queue<void*>           m_SendPacketQueue;
     Lock                        m_SendPakcetQueueLock;
 public:
-    CIocpServer(CIocpServer* sub):
-      m_iocpHandle(INVALID_HANDLE_VALUE),
-      m_listenSocket(INVALID_SOCKET),
-      m_subServerComponent(NULL){
-      m_subServerComponent=sub;
-    }
+
+    CIocpServer(const CIocpServer&)             = delete;
+    CIocpServer& operator=(const CIocpServer&)  = delete;
+    CIocpServer(CIocpServer&&)                  = delete;
+    CIocpServer&& operator=(CIocpServer&&)      = delete;
+
+	CIocpServer(CIocpServer* sub) :
+		m_acceptClientInfor(),
+		m_iocpHandle(INVALID_HANDLE_VALUE),
+		m_listenSocket(INVALID_SOCKET),
+		m_subServerComponent(nullptr),
+		m_workthreadCount() {
+
+		for (int i = 0;i < MAX_WORKER_THREAD;++i)
+			m_workerThreads[i] = INVALID_HANDLE_VALUE;
+		m_subServerComponent = sub;
+	}
 
     ~CIocpServer(){}
 
@@ -72,8 +75,6 @@ public:
     bool  ServerInitialize(DWORD createWorkThreadCount = MAX_WORKER_THREAD,const int port = SERVER_PORT,bool ignore=false);
     bool  StartWorkerThread();
     bool  RegitSocketInIOCP(SOCKET regitHandle,HANDLE iocpHandle);
-    void  PushSendPacketQUeue(void* packet);
-    //void  PushSendQueue(SendData* data);
 
     inline HANDLE GetIOCPHandle()const{return m_iocpHandle;}
     inline SOCKET GetListenSocket()const{return m_listenSocket;}

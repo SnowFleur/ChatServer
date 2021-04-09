@@ -11,14 +11,6 @@
 #pragma comment(lib, "mswsock.lib")
 #endif
 
-
-#ifdef _DEBUG
-    
-#else
-
-#endif
-
-
 enum SOCKET_TYPE { TCP_TYPE = 1, UDP_TYPE };
 
 enum IO_EVENT { IO_SEND = 1, IO_RECV, IO_ACCEPT,IO_CONNECT};

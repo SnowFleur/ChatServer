@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <map>
-#include"DataDefine.h"
 #include"IocpServer.h"
+#include"ObjectPool.h"
 
 // 이 클래스가 채팅의 모든걸 관리한다.
 class CRoom;
@@ -10,48 +10,61 @@ class CSession;
 
 class CChatServer : public CIocpServer {
 
-    typedef std::vector<CSession*>::iterator        UsersIter;
-    typedef std::vector<CSession*>::const_iterator  ConstUsersIter;
-    typedef std::vector<CRoom*>::iterator           RoomsIter;
-    typedef std::vector<CRoom*>::const_iterator     ConstRoomsIter;
+	typedef void (CChatServer::* MFP)(const CSession*, void*);
 
-    typedef void (CChatServer::*MFP)(const CSession*, void*);
-    typedef  char               FN;  //Function Number
-    typedef std::pair<FN,MFP>   PairProcessPacket;
+	//typedef Iterator
+	using ConstRoomsIter	= std::vector<CRoom*>::const_iterator;
+	using RoomsIter			= std::vector<CRoom*>::iterator;
+	using ConstUsersIter	= std::vector<CSession*>::const_iterator;
+	using UsersIter			= std::vector<CSession*>::iterator;
+
+	//typedef Smart Pointer
+	using UptrRoom			= std::unique_ptr<CRoom>;
+
+	//typedef Objectpool
+	//using UptrSessionPool	= std::unique_ptr<CObjectPool<CSession>>;
+
+
+	//Function Number
+	using FN				= char;
+
+	using PairProcessPacket	= std::pair<FN, MFP>;
 
 private:
-    std::vector<CSession*>  m_users;
-    CRoom*                  m_roomHandle;
-    volatile ClientID       m_clientIndex;
+	std::vector<CSession*>  m_users;
+	Lock                    m_usersLock;
 
-    Lock                    m_usersLock;
-    Lock                    m_clientIndexLock;
-    
-    std::map<FN,MFP>        m_processPacket;
+	UptrRoom				m_roomHandle;
+	
+	std::atomic<ClientID>	m_amClientIndex;
 
-    CChatServer(const CChatServer &);
-    CChatServer &operator=(const CChatServer &);
+	std::map<FN, MFP>       m_processPacket;
 
-    void Send_Message(const CSession* user,void* packetBuffer=NULL);
-    void Send_ChangedRoom(const CSession* user,void* packetBuffer=NULL);
-    void Send_WhisperMessage(const CSession* user,void* packetBuffer=NULL);
+	//UptrSessionPool			m_sessionPool;
 
-    void Send_LoginOK(const CSession* user,void* packetBuffer=NULL);
+
+	void Send_Message(const CSession* user, void* packetBuffer = nullptr);
+	void Send_ChangedRoom(const CSession* user, void* packetBuffer = nullptr);
+	void Send_WhisperMessage(const CSession* user, void* packetBuffer = nullptr);
+	void Send_LoginOK(const CSession* user, void* packetBuffer = nullptr);
 
 public:
-    void InitSubServer() override;
-    void RunSubServer() override;
-    void ProcessAsyncAccpet(CSession &session)override;
-    void ProcessSocketIO(void* packet,const CSession& session)override;
-    CSession* CreateSubSession()override; 
+	CChatServer(const CChatServer&)				= delete;
+	CChatServer& operator=(const CChatServer&)	= delete;
+	CChatServer(CChatServer&&)					= delete;
+	CChatServer&& operator=(CChatServer&&)		= delete;
 
-    CChatServer():
-    CIocpServer(this),
-    m_roomHandle(NULL){}
 
-    ~CChatServer() {
-      if (m_roomHandle != NULL)
-        delete m_roomHandle;
-    }
+	void InitSubServer() override;
 
+	void RunSubServer() override;
+
+	void ProcessAsyncAccpet(CSession& session)override;
+
+	void ProcessSocketIO(void* packet, const CSession& session)override;
+
+	CSession* CreateSubSession()override;
+
+	CChatServer();
+	~CChatServer();
 };

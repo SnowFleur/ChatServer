@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ClientNetwork">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="ScreenManager">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -16,54 +12,55 @@
     <Filter Include="ChatClient">
       <UniqueIdentifier>{9e43994c-a31a-4fa4-97af-f51bbc771100}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Protocol">
+    <Filter Include="Network">
       <UniqueIdentifier>{02976879-182d-4c8d-84d2-d3f483706539}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\ClientNetwork">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ClientNetwork.cpp">
-      <Filter>ClientNetwork</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\main.cpp">
-      <Filter>ClientNetwork</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ScreenManager.cpp">
-      <Filter>ScreenManager</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ConsoleLogger.cpp">
-      <Filter>ConsoleLogger</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ChatClient.cpp">
+    <ClCompile Include="ChatClient.cpp">
       <Filter>ChatClient</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatServer\Lock.cpp">
-      <Filter>Protocol</Filter>
+    <ClCompile Include="ClientNetwork.cpp">
+      <Filter>Network\ClientNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChatServer\Lock.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleLogger.cpp">
+      <Filter>ConsoleLogger</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenManager.cpp">
+      <Filter>ScreenManager</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ChatClient</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ClientNetwork.h">
-      <Filter>ClientNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ScreenManager.h">
-      <Filter>ScreenManager</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ConsoleLogger.h">
-      <Filter>ConsoleLogger</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatClient\ChatClient.h">
+    <ClInclude Include="ChatClient.h">
       <Filter>ChatClient</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatServer\Lock.h">
-      <Filter>Protocol</Filter>
+    <ClInclude Include="ClientNetwork.h">
+      <Filter>Network\ClientNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatServer\Protocol.h">
-      <Filter>Protocol</Filter>
+    <ClInclude Include="..\ChatServer\Lock.h">
+      <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatServer\RingBuffer.h">
-      <Filter>Protocol</Filter>
+    <ClInclude Include="..\ChatServer\RingBuffer.h">
+      <Filter>Network</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Desktop\code\Chat\ChatProject\ChatServer\WinSocketHeader.h">
-      <Filter>Protocol</Filter>
+    <ClInclude Include="..\ChatServer\WinSocketHeader.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="ConsoleLogger.h">
+      <Filter>ConsoleLogger</Filter>
+    </ClInclude>
+    <ClInclude Include="ScreenManager.h">
+      <Filter>ScreenManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

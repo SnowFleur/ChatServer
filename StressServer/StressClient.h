@@ -14,9 +14,10 @@ private:
 public:
   
   CDummyClinet(CIocpServer* server):
-  CSession(server){}
+  CSession(server),
+  m_myId(DEFAULT_CLINET_ID){}
   
-  ~CDummyClinet() {}
+  ~CDummyClinet() = default;
 
   void ProcessIO() override;
 
