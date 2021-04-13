@@ -1,7 +1,5 @@
 #pragma once
 
-#define _USED_RING_BUFFER
-
 #include<queue>
 #include<concurrent_queue.h>
 #include"RingBuffer.h"

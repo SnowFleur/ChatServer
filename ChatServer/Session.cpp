@@ -1,10 +1,10 @@
-#include <iostream>
-
 #include "Session.h"
 #include "IocpServer.h"
 #include "OverlappedEx.h"
-
-
+#include <iostream>
+/*
+나중에 메모리풀 넣기
+*/
 bool CSession::DoRecv() {
 	DWORD dwBytes = 0, dwFlags = 0;
 	int recvReturn = 0;

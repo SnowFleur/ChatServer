@@ -9,9 +9,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Chat Server\PacketFactory">
-      <UniqueIdentifier>{e781d806-489b-4901-8a5a-81330df13221}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChatServer.cpp">
@@ -58,6 +55,9 @@
     <ClInclude Include="OverlappedEx.h">
       <Filter>IOCP Server</Filter>
     </ClInclude>
+    <ClInclude Include="Protocol.h">
+      <Filter>IOCP Server</Filter>
+    </ClInclude>
     <ClInclude Include="RingBuffer.h">
       <Filter>IOCP Server</Filter>
     </ClInclude>
@@ -68,18 +68,6 @@
       <Filter>IOCP Server</Filter>
     </ClInclude>
     <ClInclude Include="WinSocketHeader.h">
-      <Filter>IOCP Server</Filter>
-    </ClInclude>
-    <ClInclude Include="MemoryPool.h">
-      <Filter>IOCP Server</Filter>
-    </ClInclude>
-    <ClInclude Include="Protocol.h">
-      <Filter>Chat Server</Filter>
-    </ClInclude>
-    <ClInclude Include="PacketFactory.h">
-      <Filter>Chat Server\PacketFactory</Filter>
-    </ClInclude>
-    <ClInclude Include="IOCP_DataDefine.h">
       <Filter>IOCP Server</Filter>
     </ClInclude>
   </ItemGroup>

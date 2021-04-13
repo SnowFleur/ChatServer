@@ -30,12 +30,9 @@
   <ItemGroup>
     <ClInclude Include="ChatServer.h" />
     <ClInclude Include="IocpServer.h" />
-    <ClInclude Include="IOCP_DataDefine.h" />
     <ClInclude Include="Lock.h" />
-    <ClInclude Include="MemoryPool.h" />
     <ClInclude Include="ObjectPool.h" />
     <ClInclude Include="OverlappedEx.h" />
-    <ClInclude Include="PacketFactory.h" />
     <ClInclude Include="Protocol.h" />
     <ClInclude Include="RingBuffer.h" />
     <ClInclude Include="Room.h" />

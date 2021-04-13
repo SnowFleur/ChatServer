@@ -1,26 +1,25 @@
 #pragma once
-#include<memory>
-
+#include<queue>
 #include"WinSocketHeader.h"
 #include"ObjectPool.h"
-#include"IOCP_DataDefine.h"
+#include"Protocol.h"
+#include"Lock.h"
 
-
-class  CWorkerThread;
-class  CBaseServer;
-class  OverlappedEx;
-class  CSession;
-struct PacketHeader;
+class CWorkerThread;
+class CBaseServer;
+class OverlappedEx;
+class CSession;
+class PacketHeader;
 
 /*
 Server 큐는 그냥 넘겨주는거 하고 따로 후처리 하지말고
 Sessino 큐에서 후처리 하자
 */
 
+typedef std::pair<CSession*,PacketHeader*> SendData;
+
 // 1 4 4 4 4 
 class CIocpServer{
-   // using UptrSessionPool = std::unique_ptr<CObjectPool<CSession>>;
-
 private:
     char                          m_acceptClientInfor[50];
     HANDLE                        m_iocpHandle;
@@ -29,8 +28,6 @@ private:
     CIocpServer*                  m_subServerComponent;
     DWORD                         m_workthreadCount;
  
-    //UptrSessionPool               m_sessionPool;
-
     void ReleaseWorkerThreadHandle();
     void WaitForWorkerThreads();
 
@@ -43,6 +40,8 @@ private:
     void  ProcessRecv(OverlappedEx* overEX,DWORD ioByte);
     void  AsyncAccept();
 
+    std::queue<void*>           m_SendPacketQueue;
+    Lock                        m_SendPakcetQueueLock;
 public:
 
     CIocpServer(const CIocpServer&)             = delete;
@@ -55,10 +54,7 @@ public:
 		m_iocpHandle(INVALID_HANDLE_VALUE),
 		m_listenSocket(INVALID_SOCKET),
 		m_subServerComponent(nullptr),
-		m_workthreadCount()
-      //  m_sessionPool()
-    {
-      //  m_sessionPool = std::make_unique<CObjectPool<CSession>>(MAX_CLIENT);
+		m_workthreadCount() {
 
 		for (int i = 0;i < MAX_WORKER_THREAD;++i)
 			m_workerThreads[i] = INVALID_HANDLE_VALUE;

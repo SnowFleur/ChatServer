@@ -84,9 +84,6 @@ bool CIocpServer::StartWorkerThread() {
 		m_workerThreads[i] = (HANDLE)_beginthreadex(NULL, 0, &CIocpServer::WinCreateWorkerThread, this, 0, (unsigned*)&NumberOfWork);
 	}
 
-	// if(_beginthreadex(NULL, 0, &CIocpServer::WinCreateNetworkThread, this, 0, NULL)==-1)
-	//   std::cout<<"Error: Not Create Thread\n";
-
 	//Server Start!!
 	InitSubServer();
 	RunSubServer();
@@ -214,7 +211,10 @@ void CIocpServer::ProcessAccept(OverlappedEx* overEX, HANDLE iocpHandle) {
 void CIocpServer::ProcessRecv(OverlappedEx* overEX, DWORD ioByte) {
 
 	int rest = ioByte;
-	char* ptr = overEX->session->GetRecvReadBuffer();
+	
+	//char* ptr = overEX->session->GetRecvReadBuffer();
+	char* ptr = overEX->wsabuf.buf;
+
 	PacketSize packet_size = 0;
 
 	if (overEX->session->GetPrevSize() > 0) {
