@@ -7,7 +7,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatServer", "ChatServer\Ch
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ChatClient", "ChatClient\ChatClient.vcxproj", "{C3F7AEE8-ED5A-4A9D-A155-12461AC17EC0}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "DummyClient\DummyClient.vcxproj", "{41A34782-9C8D-4923-9BF4-60B439429448}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DummyClient", "StressServer\DummyClient.vcxproj", "{41A34782-9C8D-4923-9BF4-60B439429448}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

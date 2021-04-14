@@ -143,6 +143,8 @@
     <ClCompile Include="..\ChatServer\Lock.cpp" />
     <ClCompile Include="..\ChatServer\Session.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StressClient.cpp" />
+    <ClCompile Include="StressServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ChatServer\IocpServer.h" />

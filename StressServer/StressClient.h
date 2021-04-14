@@ -1,7 +1,6 @@
 #pragma once 
 
 #include "..\ChatServer\Session.h"
-#include"..\ChatServer\IocpServer.h"
 
 
 enum WORKS{
@@ -24,10 +23,4 @@ public:
   ClientID GetClientID()const override{return m_myId;}
   void     SetClientID(const ClientID id )override{m_myId=id;}
 };
-
-
-void CDummyClinet::ProcessIO(){
-     m_serverHandle->ProcessSocketIO(NULL, *this);
-}
-
 
